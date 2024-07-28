@@ -41,13 +41,15 @@ class GaborDataset(Dataset):
 # %%
 dataset = GaborDataset(x, y)
 # %%
-data_loader = DataLoader(dataset=dataset, batch_size=1, shuffle=False)
+data_loader = DataLoader(dataset=dataset, batch_size=1, shuffle=True)
 # %%
 class GaborModel(nn.Module):
     def __init__(self):
         super().__init__()
         self.phi = nn.Sequential(
             nn.Linear(2, 50),
+            nn.ReLU(),
+            nn.Linear(50, 50),
             nn.ReLU(),
             nn.Linear(50, 1)
         )
@@ -68,7 +70,7 @@ for i in range(epoch):
         loss.backward()
         opt.step()
         
-    if i % 100 == 0:
+    if i % 1000 == 0:
         print(f"Epoch: {i}, Loss: {loss.item()}")
 # %%
 x_test_ = np.linspace(start=-15, stop=15, num=N)
@@ -86,8 +88,8 @@ for i in range(N):
 # %%
 plt.plot(x_test_, y_preds)
 plt.scatter(x_test_, y_test)
+plt.xlim(-15, 15)
+plt.ylim(-1.5, 1.5)
 plt.xlabel("x")
 plt.ylabel("gabor model")
-# %%
-
 # %%
